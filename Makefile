@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -g -lSDL2 -Iinclude
-SRC = src/main.c src/gui.c
+SRC = src/main.c src/client.c src/gui.c
 OBJ = $(SRC:.c=.o)
 EXEC = messenger
 

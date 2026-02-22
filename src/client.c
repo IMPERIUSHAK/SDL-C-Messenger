@@ -1,6 +1,4 @@
 #include "client.h"
-#include "gui.h"
-
 
 void run_client(SDL_Window *window) {
     int running = 1;
@@ -8,13 +6,20 @@ void run_client(SDL_Window *window) {
 
     while (running) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                running = 0;
+            switch (event.type)
+            {
+                case SDL_QUIT:
+                    running = 0;
+                    break;
+                case SDL_KEYDOWN:
+                    if (event.key.keysym.sym == SDLK_ESCAPE){    
+                        running = 0;
+                        break;
+                    }
+                default:
+                    break;
             }
-            
-            handle_input(event);
-            
-            update_gui(window);
+            //update_gui(window);
         }
     }
 }

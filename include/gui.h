@@ -1,3 +1,5 @@
+#ifndef GUI_H
+#define GUI_H
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -25,8 +27,23 @@ struct GUIState{
     //SDL_Rect chat_area;
     //SDL_Rect message_area;
 };*/
-char *str = {"AKO", "AMIN", "BCHFV", "N3SHOW", "HAMZA4IK"};
+
+
+//test-case
+struct showData{
+    char *users[5];
+    int count;
+};
+/*
+static struct showData data = {
+    .users = {"AKO", "AMIN", "BCHFV", "N3SHOW", "HAMZA4IK"},
+    .count = 5,
+};
+*/
+
 
 bool initialize_gui(struct GUIState* app);
-void update_gui();
+void update_gui(struct showData *data);
 void gui_cleanup(struct GUIState* app, int exit_status);
+
+#endif
