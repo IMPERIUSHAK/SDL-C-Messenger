@@ -12,7 +12,7 @@ int main() {
         gui_cleanup(&app, EXIT_FAILURE);
     }
 
-    run_client(app.window);
+    run_client(&app);
 
     SDL_RenderClear(app.renderer);
     SDL_RenderPresent(app.renderer);

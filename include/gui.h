@@ -30,11 +30,11 @@ struct GUIState{
 
 
 //test-case
-struct showData{
+/*struct showData{
     char *users[5];
     int count;
 };
-/*
+
 static struct showData data = {
     .users = {"AKO", "AMIN", "BCHFV", "N3SHOW", "HAMZA4IK"},
     .count = 5,
@@ -43,7 +43,7 @@ static struct showData data = {
 
 
 bool initialize_gui(struct GUIState* app);
-void update_gui(struct showData *data);
+//void update_gui(struct showData *data);
 void gui_cleanup(struct GUIState* app, int exit_status);
 
 #endif
