@@ -6,9 +6,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-static const char *str[] = {"AKO", "AMIN", "BCHFV", "N3SHOW", "HAMZA4IK"};
-static const int str_count = sizeof(str)/sizeof(str[0]);
-
 bool initialize_gui(struct GUIState* app){
 
     if(SDL_Init(SDL_INIT_EVERYTHING)) {
@@ -34,9 +31,35 @@ bool initialize_gui(struct GUIState* app){
 }
 
 void gui_cleanup(struct GUIState* app, int exit_status){
-    SDL_DestroyWindow(app->window);
+    
+    free(app->chats_rect);
     SDL_DestroyRenderer(app->renderer);
-
+    SDL_DestroyWindow(app->window);
     SDL_Quit();
     exit(exit_status);
+}
+
+void update_gui(struct GUIState* app, struct showData* data){
+    
+    int num = data->count;
+    free(app->chats_rect);
+    
+    app->chats_rect = (SDL_Rect* )malloc(num * sizeof(SDL_Rect));
+
+    if (app->chats_rect == NULL) gui_cleanup(app, EXIT_FAILURE);
+
+    app->chats_count = num;
+
+    int x = 0, y = 30;
+    for(int i = 0; i < num; i++){
+        
+        app->chats_rect[i] = (SDL_Rect){
+            .x = x,
+            .y = y,
+            .w = 400,
+            .h = 70
+        };
+
+        y+=100;
+    }
 }

@@ -13,10 +13,6 @@ int main() {
     }
 
     run_client(&app);
-
-    SDL_RenderClear(app.renderer);
-    SDL_RenderPresent(app.renderer);
-
     gui_cleanup(&app, EXIT_SUCCESS);
     
     return 0;
