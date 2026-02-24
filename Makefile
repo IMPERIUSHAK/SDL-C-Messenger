@@ -1,5 +1,6 @@
 CC = gcc
-CFLAGS = -Wall -g -lSDL2 -Iinclude
+CFLAGS = -Wall -g -Iinclude `sdl2-config --cflags`
+LDFLAGS = `sdl2-config --libs` -lSDL2_ttf
 SRC = src/main.c src/client.c src/gui.c
 OBJ = $(SRC:.c=.o)
 EXEC = messenger
@@ -7,7 +8,7 @@ EXEC = messenger
 all: $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(CC) $(OBJ) -o $(EXEC) $(CFLAGS)
+	$(CC) $(OBJ) -o $(EXEC) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)

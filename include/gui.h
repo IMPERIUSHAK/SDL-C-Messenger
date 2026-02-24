@@ -1,21 +1,22 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include <stdio.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include <stdio.h>
-#include <stdio.h>
 #include <stdbool.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
+#define TEXT_FONT 23
 #define WINDOW_TITLE "HaNaKo"
 
 struct GUIState{
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Rect *chats_rect;
+    SDL_Texture **text_image;
+    TTF_Font *text_font;
     uint32_t chats_count;
 };
 
@@ -38,7 +39,8 @@ struct showData{
 };
 
 bool initialize_gui(struct GUIState* app);
-void update_gui(struct GUIState* app, struct showData* data);
+bool update_gui(struct GUIState* app, struct showData* data);
+void render_chats(struct GUIState* app);
 void gui_cleanup(struct GUIState* app, int exit_status);
 
 #endif

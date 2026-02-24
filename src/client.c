@@ -35,14 +35,21 @@ void run_client(struct GUIState *app) {
     bool isRunning = true;
     SDL_Event event;
 
+    if (update_gui(app, &data)){
+        gui_cleanup(app, EXIT_FAILURE);
+        return;
+    }
+
     while (isRunning) { 
 
         client_events(app, &event, &isRunning);
         SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 255);
         SDL_RenderClear(app->renderer);
-        update_gui(app, &data);
+        
+        render_chats(app);
+
         SDL_SetRenderDrawColor(app->renderer, 124, 125, 80, 55);
-        SDL_RenderFillRects(app->renderer, app->chats_rect, app->chats_count);
+        
         SDL_RenderPresent(app->renderer);
 
     }
