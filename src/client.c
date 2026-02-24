@@ -1,15 +1,17 @@
 #include "client.h"
 
 struct showData data = {
-    .users = {"AKO", "AMIN", "BCHFV", "N3SHOW", "HAMZA4IK"},
+    .users = {"Alijon", "AMIN", "B-user", "N3SHOW", "HAMZA4IK"},
     .count = 5,
 };
 
 void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunning){
+    
     if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
         *isRunning = false;
         gui_cleanup(app, EXIT_SUCCESS);
     }
+
 }
 
 void client_events(struct GUIState *app, SDL_Event *event, bool *isRunning) {
@@ -37,8 +39,10 @@ void run_client(struct GUIState *app) {
 
     if (update_gui(app, &data)){
         gui_cleanup(app, EXIT_FAILURE);
+        fprintf(stderr, "Error initalizeing `update_gui`");
         return;
     }
+
 
     while (isRunning) { 
 
@@ -47,8 +51,7 @@ void run_client(struct GUIState *app) {
         SDL_RenderClear(app->renderer);
         
         render_chats(app);
-
-        SDL_SetRenderDrawColor(app->renderer, 124, 125, 80, 55);
+        mouse_hover(app);
         
         SDL_RenderPresent(app->renderer);
 

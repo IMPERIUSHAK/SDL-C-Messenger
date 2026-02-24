@@ -12,6 +12,7 @@ int main() {
         .renderer = NULL,
         .chats_rect = NULL,
         .text_image = NULL,
+        .color_state = NULL,
         .text_font = NULL,
         .chats_count = 0
 
@@ -21,8 +22,6 @@ int main() {
         gui_cleanup(&app, EXIT_FAILURE);
     }
     
-    app.text_font = TTF_OpenFont("fonts/freesansbold.ttf", 20);
-
     run_client(&app);
     gui_cleanup(&app, EXIT_SUCCESS);
     

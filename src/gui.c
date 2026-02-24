@@ -12,6 +12,7 @@ bool initialize_gui(struct GUIState* app){
         fprintf(stderr, "Error initializing SDL: %s\n", SDL_GetError());
         return true;
     }
+    
     app->window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED,
                                     SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
                                     SCREEN_HEIGHT, 0);
@@ -35,7 +36,7 @@ bool initialize_gui(struct GUIState* app){
     
     app->text_font = TTF_OpenFont("fonts/freesansbold.ttf", 20);
     if(!app->text_font){
-        fprintf("Error with initialization fon:%s ",TTF_GetError());
+        fprintf(stderr, "Error with initialization fon:%s ",TTF_GetError());
     }
     
     return false;
@@ -80,7 +81,7 @@ bool update_gui(struct GUIState* app, struct showData* data){
     app->chats_rect = (SDL_Rect* )malloc(num * sizeof(SDL_Rect));
     app->text_image = (SDL_Texture** )malloc(num * sizeof(SDL_Texture*));
 
-    SDL_Color color = {255, 255, 255, 255};
+    SDL_Color color = BASE_COLOR;
 
     app->chats_count = num;
 
@@ -114,24 +115,66 @@ bool update_gui(struct GUIState* app, struct showData* data){
     return false;
 }
 
-void render_chats(struct GUIState *app) {
+SDL_Rect center_text_rect(SDL_Rect r, int w, int h){
+    
+    SDL_Rect dst = {
+        .x = r.x + (r.w - w)/2,
+        .y = r.y + (r.h - h)/2,
+        .w = w,
+        .h = h,
+    };
+
+    return dst;
+}
+
+void render_chats(struct GUIState* app) {
     
     for (int i = 0; i < app->chats_count; i++) {
         if (!app->text_image[i]) continue;
         
-        SDL_SetRenderDrawColor(app->renderer, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(app->renderer, 100, 0, 100, 0);
         SDL_RenderFillRect(app->renderer, &app->chats_rect[i]);
 
         int textW, textH;
         SDL_QueryTexture(app->text_image[i], NULL, NULL, &textW, &textH);
 
-        SDL_Rect dstRect = {
-            .x = app->chats_rect[i].x + (app->chats_rect[i].w - textW)/2,
-            .y = app->chats_rect[i].y + (app->chats_rect[i].h - textH)/2,
-            .w = textW,
-            .h = textH
-        };
+        SDL_Rect dstRect = center_text_rect(app->chats_rect[i], textW, textH);
 
         SDL_RenderCopy(app->renderer, app->text_image[i], NULL, &dstRect);
     }
+
+}
+
+
+bool point_in_rect(int x, int y, SDL_Rect *r) {
+    return (x >= r->x &&
+            x <= r->x + r->w &&
+            y >= r->y &&
+            y <= r->y + r->h);
+}
+
+
+
+void mouse_hover(struct GUIState* app){
+
+    int n = app->chats_count;
+    int x = 0, y = 0;
+
+    for(int i = 0; i < n; i++){
+        
+        SDL_GetMouseState(&x, &y);
+        
+        if (!point_in_rect(x, y, &app->chats_rect[i])){ continue;}
+
+        SDL_SetRenderDrawColor(app->renderer, 200, 50, 50, 255);
+        SDL_RenderFillRect(app->renderer, &app->chats_rect[i]);
+
+        int textW, textH;
+        SDL_QueryTexture(app->text_image[i], NULL, NULL, &textW, &textH);
+        SDL_Rect dstRect = center_text_rect(app->chats_rect[i], textW, textH);
+
+        SDL_RenderCopy(app->renderer, app->text_image[i], NULL, &dstRect);
+
+    }
+
 }
