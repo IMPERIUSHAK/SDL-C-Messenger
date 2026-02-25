@@ -43,7 +43,6 @@ bool initialize_gui(struct GUIState* app){
 
 }
 
-
 //app clean app function
 void gui_cleanup(struct GUIState* app, int exit_status){
     
