@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-    
+//function for first initialization to check everything  before start-up  
 bool initialize_gui(struct GUIState* app){
 
     if(SDL_Init(SDL_INIT_EVERYTHING)) {
@@ -117,6 +117,7 @@ bool update_gui(struct GUIState* app, struct showData* data){
     return false;
 }
 
+//function to center the string inside rect
 SDL_Rect center_text_rect(SDL_Rect r, int w, int h){
     
     SDL_Rect dst = {
@@ -129,6 +130,7 @@ SDL_Rect center_text_rect(SDL_Rect r, int w, int h){
     return dst;
 }
 
+//function to render chat in every frame
 void render_chats(struct GUIState* app) {
     
     for (int i = 0; i < app->chats.count; i++) {
@@ -147,7 +149,7 @@ void render_chats(struct GUIState* app) {
 
 }
 
-
+//hover function for mouse cursor
 bool point_in_rect(int x, int y, SDL_Rect *r) {
     return (x >= r->x &&
             x <= r->x + r->w &&
