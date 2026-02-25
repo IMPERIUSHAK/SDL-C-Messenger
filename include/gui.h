@@ -13,6 +13,26 @@
 #define BASE_COLOR {255, 255, 255, 255}
 #define HOVER_COLOR {0, 125, 125, 124}
 
+struct ChatItem{
+    char* text;
+    SDL_Texture *texture;
+    SDL_Rect rect;
+};
+
+struct ChatList{
+    struct ChatItem* items;
+    size_t count;
+    int scroll_offset;
+};
+
+struct GUIState{
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    struct ChatList chats;
+    SDL_Color *color_state;
+    TTF_Font *text_font;
+};
+/*
 struct GUIState{
     SDL_Window *window;
     SDL_Renderer *renderer;
@@ -21,7 +41,13 @@ struct GUIState{
     SDL_Color *color_state;
     TTF_Font *text_font;
     uint32_t chats_count;
-};
+    const SDL_Rect chats_tab={
+        .x = 0,
+        .y = 0,
+        .w = 100,
+        .h = 300
+   .}
+*/
 
 /*struct GUIState{
     SDL_Window *window;
@@ -37,7 +63,7 @@ struct GUIState{
 
 //test-case
 struct showData{
-    char *users[5];
+    char *users[1000];
     int count;
 };
 

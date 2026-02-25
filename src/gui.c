@@ -43,14 +43,14 @@ bool initialize_gui(struct GUIState* app){
 
 }
 
+
+//app clean app function
 void gui_cleanup(struct GUIState* app, int exit_status){
     
-    free(app->chats_rect);
-    
-    for (int i = 0; i < app->chats_count; i++){
-        SDL_DestroyTexture(app->text_image[i]);
+    for (int i = 0; i < app->chats.count; i++){
+        SDL_DestroyTexture(app->chats.items[i].texture);
     }
-    free(app->text_image); 
+    free(app->chats.items); 
     
     SDL_DestroyRenderer(app->renderer);
     SDL_DestroyWindow(app->window);
@@ -59,57 +59,60 @@ void gui_cleanup(struct GUIState* app, int exit_status){
     exit(exit_status);
 }
 
+
+//update all
 bool update_gui(struct GUIState* app, struct showData* data){
     
     int num = data->count;
-
         
-    if (app->chats_rect){
-        free(app->chats_rect);
-        app->chats_rect = NULL;
+    if (app->chats.items){
+        free(app->chats.items);
     }
 
-    if (app->text_image) {
-        for (int i = 0; i < app->chats_count; i++){
-            SDL_DestroyTexture(app->text_image[i]);
-        }
-        free(app->text_image);
-        app->text_image = NULL;
+    //free up space for updated/new chats
+    app->chats.items = malloc(num * sizeof(*app->chats.items));
+    if(!app->chats.items){
+        fprintf(stderr, "Error with Items init");
+        return true;
     }
-    
-    
-    app->chats_rect = (SDL_Rect* )malloc(num * sizeof(SDL_Rect));
-    app->text_image = (SDL_Texture** )malloc(num * sizeof(SDL_Texture*));
 
     SDL_Color color = BASE_COLOR;
 
-    app->chats_count = num;
-
-    int x = 0, y = 30;
+    app->chats.count = num;
     
-    for(int i = 0; i < num; i++){
+    int scroll = app->chats.scroll_offset;
+
+    int x = 0, y = 0, i = scroll;
+
+    
+    //update chats
+    while(y < SCREEN_WIDTH && i < num){
         
         const char *name = data->users[i];
         
+        //Font Init
         SDL_Surface *textSurface = TTF_RenderText_Blended(app->text_font, name, color);
         if (!textSurface){
             return true;
         }
-
+        
+        //creating surface and texture for chats
         SDL_Texture *textTexture = SDL_CreateTextureFromSurface(app->renderer, textSurface);
         SDL_FreeSurface(textSurface);
-        if (!textTexture) return true;
-
-        app->text_image[i] = textTexture;
         
-        app->chats_rect[i] = (SDL_Rect){
+        if (!textTexture) return true;
+        app->chats.items[i].texture = textTexture;
+        
+        //setint rect to chats
+        app->chats.items[i].rect = (SDL_Rect){
             .x = x,
             .y = y,
             .w = 400,
             .h = 70
         };
 
-        y+=100;
+        y+=70;
+        i++;
     }
 
     return false;
@@ -129,18 +132,18 @@ SDL_Rect center_text_rect(SDL_Rect r, int w, int h){
 
 void render_chats(struct GUIState* app) {
     
-    for (int i = 0; i < app->chats_count; i++) {
-        if (!app->text_image[i]) continue;
+    for (int i = 0; i < app->chats.count; i++) {
+        if (!app->chats.items[i].texture) continue;
         
         SDL_SetRenderDrawColor(app->renderer, 100, 0, 100, 0);
-        SDL_RenderFillRect(app->renderer, &app->chats_rect[i]);
+        SDL_RenderFillRect(app->renderer, &app->chats.items[i].rect);
 
         int textW, textH;
-        SDL_QueryTexture(app->text_image[i], NULL, NULL, &textW, &textH);
+        SDL_QueryTexture(app->chats.items[i].texture, NULL, NULL, &textW, &textH);
 
-        SDL_Rect dstRect = center_text_rect(app->chats_rect[i], textW, textH);
+        SDL_Rect dstRect = center_text_rect(app->chats.items[i].rect, textW, textH);
 
-        SDL_RenderCopy(app->renderer, app->text_image[i], NULL, &dstRect);
+        SDL_RenderCopy(app->renderer, app->chats.items[i].texture, NULL, &dstRect);
     }
 
 }
@@ -157,23 +160,23 @@ bool point_in_rect(int x, int y, SDL_Rect *r) {
 
 void mouse_hover(struct GUIState* app){
 
-    int n = app->chats_count;
+    int n = app->chats.count;
     int x = 0, y = 0;
 
     for(int i = 0; i < n; i++){
         
         SDL_GetMouseState(&x, &y);
         
-        if (!point_in_rect(x, y, &app->chats_rect[i])){ continue;}
+        if (!point_in_rect(x, y, &app->chats.items[i].rect)){ continue;}
 
         SDL_SetRenderDrawColor(app->renderer, 200, 50, 50, 255);
-        SDL_RenderFillRect(app->renderer, &app->chats_rect[i]);
+        SDL_RenderFillRect(app->renderer, &app->chats.items[i].rect);
 
         int textW, textH;
-        SDL_QueryTexture(app->text_image[i], NULL, NULL, &textW, &textH);
-        SDL_Rect dstRect = center_text_rect(app->chats_rect[i], textW, textH);
+        SDL_QueryTexture(app->chats.items[i].texture, NULL, NULL, &textW, &textH);
+        SDL_Rect dstRect = center_text_rect(app->chats.items[i].rect, textW, textH);
 
-        SDL_RenderCopy(app->renderer, app->text_image[i], NULL, &dstRect);
+        SDL_RenderCopy(app->renderer, app->chats.items[i].texture, NULL, &dstRect);
 
     }
 

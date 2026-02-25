@@ -1,8 +1,8 @@
 #include "client.h"
 
 struct showData data = {
-    .users = {"Alijon", "AMIN", "B-user", "N3SHOW", "HAMZA4IK"},
-    .count = 5,
+    .users = {"Alijon", "AMIN", "B-user", "N3SHOW", "HAMZA4IK", "LOLO", "KOKO", "SHOCO", "MAKHA", "GGWP", "MANAM", "MANTU"},
+    .count = 10,
 };
 
 void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunning){
@@ -13,6 +13,38 @@ void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunnin
     }
 
 }
+
+void handle_wheele_up(struct GUIState* app){
+
+    int key = app->chats.scroll_offset;
+
+    if (key >= app->chats.count) return;
+
+    app->chats.scroll_offset++;
+    update_gui(app, &data);
+}
+
+void handle_wheele_down(struct GUIState* app){
+
+    int key = app->chats.scroll_offset;
+
+    if (key == 0) return;
+
+    app->chats.scroll_offset--;
+    update_gui(app, &data);
+
+}
+
+void handle_mousewheel(struct GUIState *app, SDL_Event *event){
+
+    if(event->wheel.y > 0){
+        handle_wheele_up(app);
+    }else{
+        handle_wheele_down(app);
+    }
+
+}
+
 
 void client_events(struct GUIState *app, SDL_Event *event, bool *isRunning) {
     
@@ -25,6 +57,9 @@ void client_events(struct GUIState *app, SDL_Event *event, bool *isRunning) {
                 return;
             case SDL_KEYDOWN:
                 handle_keydown(app, event, isRunning);
+                break;
+            case SDL_MOUSEWHEEL:
+                handle_mousewheel(app, event);
                 break;
             default:
                 break;
