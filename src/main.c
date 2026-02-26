@@ -7,20 +7,18 @@
 
 int main(void)
 {
-    struct GUIState app = {
-        .window = NULL,
-        .renderer = NULL,
+    struct GUIState app = {0};
 
-        .chats = {
-            .items = NULL,
-            .count = 0,
-            .scroll_offset = 0,
-        },
+    if (init_messages(&app.messages)){
+        gui_cleanup(&app, EXIT_FAILURE);
+        messages_free(&app.messages);
+        return EXIT_FAILURE;
+    }
 
-        .color_state = NULL,
-        .text_font = NULL,
-    };
-
+    for(int i = 0; i < app.messages.capacity; i++) {
+        printf("%s/n", app.messages.items[i].text);
+    }
+    
     if (initialize_gui(&app)) {
         gui_cleanup(&app, EXIT_FAILURE);
         return EXIT_FAILURE;

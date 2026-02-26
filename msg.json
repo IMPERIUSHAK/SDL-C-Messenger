@@ -1,0 +1,36 @@
+{
+    "messages": [
+        {
+            "id": 1,
+            "text": "hello",
+            "timestamp": 983753,
+            "type": "MESSAGE_INCOMING"
+        },
+        {
+            "id": 2,
+            "text": "hi 👋",
+            "timestamp": 983760,
+            "type": "MESSAGE_OUTGOING"
+        },
+        {
+            "id": 3,
+            "text": "how are you?",
+            "timestamp": 983772,
+            "type": "MESSAGE_OUTGOING"
+        },
+        {
+            "id": 4,
+            "text": "I'm fine, working on a C + SDL project",
+            "timestamp": 983810,
+            "type": "MESSAGE_INCOMING"
+        },
+        {
+            "id": 5,
+            "text": "nice, good luck!",
+            "timestamp": 983845,
+            "type": "MESSAGE_INCOMING"
+        }
+    ],
+    "count": 5,
+    "capacity": 16
+}

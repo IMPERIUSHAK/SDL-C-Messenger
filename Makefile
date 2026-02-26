@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -g -Iinclude `sdl2-config --cflags`
-LDFLAGS = `sdl2-config --libs` -lSDL2_ttf
-SRC = src/main.c src/client.c src/gui.c
+LDFLAGS = `sdl2-config --libs` -lSDL2_ttf -lcjson
+SRC = src/main.c src/client.c src/gui.c src/messages.c
 OBJ = $(SRC:.c=.o)
 EXEC = messenger
 

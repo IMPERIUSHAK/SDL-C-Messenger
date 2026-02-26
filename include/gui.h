@@ -1,10 +1,10 @@
 #ifndef GUI_H
 #define GUI_H
-
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
+#include "messages.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -14,7 +14,7 @@
 #define HOVER_COLOR {0, 125, 125, 124}
 
 struct ChatItem{
-    char* text;
+    struct Message* text;
     SDL_Texture *texture;
     SDL_Rect rect;
 };
@@ -29,6 +29,7 @@ struct GUIState{
     SDL_Window *window;
     SDL_Renderer *renderer;
     struct ChatList chats;
+    struct MessageList messages;
     SDL_Color *color_state;
     TTF_Font *text_font;
 };

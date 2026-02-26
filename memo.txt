@@ -1,0 +1,3 @@
+meesage->messageList-------------------->guistate
+        \                           /
+         \--> ChatItem->ChatList-->/
