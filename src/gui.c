@@ -58,17 +58,39 @@ void gui_cleanup(struct GUIState* app, int exit_status){
     exit(exit_status);
 }
 
+void who_sent(enum MessageType bywho, char* str) {
+    char *prefix;
+    size_t prefix_len;
+    
+    if (bywho == MESSAGE_INCOMING) {
+        prefix = "Me: ";
+        prefix_len = 4;
+    } else if (bywho == MESSAGE_OUTGOING) {
+        prefix = "Friend: ";
+        prefix_len = 8;
+    } else {
+        return;
+    }
+    
+    char *new_text = malloc(prefix_len + strlen(str) + 1);
+    
+    if (new_text != NULL) {
+        strcpy(new_text, prefix);
+        strcat(new_text, str);
+        strcpy(str, new_text);
+        free(new_text);
+    }
+}
 
 //update all
-bool update_gui(struct GUIState* app, struct showData* data){
+bool update_gui(struct GUIState* app){
     
-    int num = data->count;
-        
+    int num = app->messages.count;
+
     if (app->chats.items){
         free(app->chats.items);
     }
 
-    //free up space for updated/new chats
     app->chats.items = malloc(num * sizeof(*app->chats.items));
     if(!app->chats.items){
         fprintf(stderr, "Error with Items init");
@@ -87,8 +109,11 @@ bool update_gui(struct GUIState* app, struct showData* data){
     //update chats
     while(y < SCREEN_WIDTH && i < num){
         
-        const char *name = data->users[i];
+        char *name = app->messages.items[i].text;
+        enum MessageType bywho = app->messages.items[i].type;
         
+        who_sent(bywho, name);
+
         //Font Init
         SDL_Surface *textSurface = TTF_RenderText_Blended(app->text_font, name, color);
         if (!textSurface){

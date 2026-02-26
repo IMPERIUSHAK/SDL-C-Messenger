@@ -63,13 +63,13 @@ struct GUIState{
 
 
 //test-case
-struct showData{
-    char *users[1000];
+/*struct showData{
+    char *info[1000];
     int count;
-};
+};*/
 
 bool initialize_gui(struct GUIState* app);
-bool update_gui(struct GUIState* app, struct showData* data);
+bool update_gui(struct GUIState* app);
 
 void render_chats(struct GUIState* app);
 void gui_cleanup(struct GUIState* app, int exit_status);

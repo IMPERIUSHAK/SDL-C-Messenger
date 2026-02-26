@@ -1,10 +1,10 @@
 #include "client.h"
 
-struct showData data = {
-    .users = {"Alijon", "AMIN", "B-user", "N3SHOW", "HAMZA4IK", "LOLO", "KOKO", "SHOCO", "MAKHA", "GGWP", "MANAM", "MANTU"},
-    .count = 10,
+/*struct showData data = {
+    .info = {"Waiting for connection"},
+    .count = 1,
 };
-
+*/
 void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunning){
     
     if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
@@ -21,7 +21,7 @@ void handle_wheele_up(struct GUIState* app){
     if (key >= app->chats.count) return;
 
     app->chats.scroll_offset++;
-    update_gui(app, &data);
+    update_gui(app);
 }
 
 void handle_wheele_down(struct GUIState* app){
@@ -31,7 +31,7 @@ void handle_wheele_down(struct GUIState* app){
     if (key == 0) return;
 
     app->chats.scroll_offset--;
-    update_gui(app, &data);
+    update_gui(app);
 
 }
 
@@ -72,7 +72,7 @@ void run_client(struct GUIState *app) {
     bool isRunning = true;
     SDL_Event event;
 
-    if (update_gui(app, &data)){
+    if (update_gui(app)){
         gui_cleanup(app, EXIT_FAILURE);
         fprintf(stderr, "Error initalizeing `update_gui`");
         return;
