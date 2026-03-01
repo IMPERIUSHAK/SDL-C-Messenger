@@ -30,8 +30,15 @@ struct GUIState{
     SDL_Renderer *renderer;
     struct ChatList chats;
     struct MessageList messages;
+    SDL_Rect input_rect;
+    char userinput[2048];
     SDL_Color *color_state;
     TTF_Font *text_font;
+};
+
+struct TextField{
+    SDL_Rect rect;
+    SDL_Texture *texture;
 };
 /*
 struct GUIState{

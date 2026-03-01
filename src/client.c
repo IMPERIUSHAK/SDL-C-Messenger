@@ -1,10 +1,4 @@
 #include "client.h"
-
-/*struct showData data = {
-    .info = {"Waiting for connection"},
-    .count = 1,
-};
-*/
 void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunning){
     
     if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
@@ -48,6 +42,8 @@ void handle_mousewheel(struct GUIState *app, SDL_Event *event){
 
 void client_events(struct GUIState *app, SDL_Event *event, bool *isRunning) {
     
+    SDL_StartTextInput();
+
     while (SDL_PollEvent(event)) {
         switch (event->type)
         {
@@ -60,6 +56,9 @@ void client_events(struct GUIState *app, SDL_Event *event, bool *isRunning) {
                 break;
             case SDL_MOUSEWHEEL:
                 handle_mousewheel(app, event);
+                break;
+            case SDL_TEXTINPUT:
+                strcat(app->userinput, event->text.text);
                 break;
             default:
                 break;

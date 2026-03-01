@@ -34,11 +34,21 @@ bool initialize_gui(struct GUIState* app){
         return true;
     }
     
-    app->text_font = TTF_OpenFont("fonts/freesansbold.ttf", 20);
+    app->text_font = TTF_OpenFont("fonts/freesansbold.ttf", 15);
     if(!app->text_font){
         fprintf(stderr, "Error with initialization fon:%s ",TTF_GetError());
+        return true;
     }
+
+    app->input_rect = (SDL_Rect){
+        .x = 50,
+        .y = 300,
+        .w = 300,
+        .h = 200
+    };
     
+    SDL_SetTextInputRect (&app->input_rect);
+
     return false;
 
 }
@@ -75,9 +85,11 @@ void who_sent(enum MessageType bywho, char* str) {
     char *new_text = malloc(prefix_len + strlen(str) + 1);
     
     if (new_text != NULL) {
+        
         strcpy(new_text, prefix);
         strcat(new_text, str);
         strcpy(str, new_text);
+
         free(new_text);
     }
 }
@@ -127,11 +139,13 @@ bool update_gui(struct GUIState* app){
         if (!textTexture) return true;
         app->chats.items[i].texture = textTexture;
         
+        if(i % 2 !=0 ){ x+= (SCREEN_WIDTH - 300);}
+        else if(i != 0 && i % 2 == 0){ x-= (SCREEN_WIDTH - 300);}
         //setint rect to chats
         app->chats.items[i].rect = (SDL_Rect){
             .x = x,
             .y = y,
-            .w = 400,
+            .w = 300,
             .h = 70
         };
 
@@ -163,12 +177,13 @@ void render_chats(struct GUIState* app) {
         
         SDL_SetRenderDrawColor(app->renderer, 100, 0, 100, 0);
         SDL_RenderFillRect(app->renderer, &app->chats.items[i].rect);
+        SDL_RenderFillRect(app->renderer, &app->input_rect);
 
         int textW, textH;
         SDL_QueryTexture(app->chats.items[i].texture, NULL, NULL, &textW, &textH);
 
         SDL_Rect dstRect = center_text_rect(app->chats.items[i].rect, textW, textH);
-
+        printf("%s", app->userinput);        
         SDL_RenderCopy(app->renderer, app->chats.items[i].texture, NULL, &dstRect);
     }
 

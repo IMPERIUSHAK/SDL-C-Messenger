@@ -1,6 +1,5 @@
 #include <SDL2/SDL.h>
 #include "client.h"
-//#include "gui.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -15,10 +14,6 @@ int main(void)
         return EXIT_FAILURE;
     }
 
-    for(int i = 0; i < app.messages.capacity; i++) {
-        printf("%s/n", app.messages.items[i].text);
-    }
-    
     if (initialize_gui(&app)) {
         gui_cleanup(&app, EXIT_FAILURE);
         return EXIT_FAILURE;
