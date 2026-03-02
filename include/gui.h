@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mouse.h>
 #include <stdbool.h>
 #include "messages.h"
 
@@ -12,6 +13,8 @@
 #define WINDOW_TITLE "HaNaKo"
 #define BASE_COLOR {255, 255, 255, 255}
 #define HOVER_COLOR {0, 125, 125, 124}
+
+
 
 struct ChatItem{
     struct Message* text;
@@ -25,21 +28,22 @@ struct ChatList{
     int scroll_offset;
 };
 
+struct TextInputField{
+    SDL_Rect rect;
+    SDL_Texture *texture;
+    char userinput[2048];
+};
+
 struct GUIState{
     SDL_Window *window;
     SDL_Renderer *renderer;
     struct ChatList chats;
     struct MessageList messages;
-    SDL_Rect input_rect;
-    char userinput[2048];
+    struct TextInputField userinput;
     SDL_Color *color_state;
     TTF_Font *text_font;
 };
 
-struct TextField{
-    SDL_Rect rect;
-    SDL_Texture *texture;
-};
 /*
 struct GUIState{
     SDL_Window *window;
@@ -69,11 +73,6 @@ struct GUIState{
 };*/
 
 
-//test-case
-/*struct showData{
-    char *info[1000];
-    int count;
-};*/
 
 bool initialize_gui(struct GUIState* app);
 bool update_gui(struct GUIState* app);

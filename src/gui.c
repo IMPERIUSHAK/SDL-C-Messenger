@@ -40,14 +40,21 @@ bool initialize_gui(struct GUIState* app){
         return true;
     }
 
-    app->input_rect = (SDL_Rect){
-        .x = 50,
-        .y = 300,
-        .w = 300,
-        .h = 200
-    };
+    // app->input_rect = (SDL_Rect){
+    //     .x = 0,
+    //     .y = SCREEN_HEIGHT - 70,
+    //     .w = SCREEN_WIDTH,
+    //     .h = 70
+    // };
     
-    SDL_SetTextInputRect (&app->input_rect);
+    // SDL_SetTextInputRect (&app->input_rect);
+
+    app->userinput.rect = (SDL_Rect){
+        .x = 0,
+        .y = SCREEN_HEIGHT - 70,
+        .w = SCREEN_WIDTH,
+        .h = 70
+    };
 
     return false;
 
@@ -68,6 +75,8 @@ void gui_cleanup(struct GUIState* app, int exit_status){
     exit(exit_status);
 }
 
+
+//define sender
 void who_sent(enum MessageType bywho, char* str) {
     char *prefix;
     size_t prefix_len;
@@ -177,13 +186,15 @@ void render_chats(struct GUIState* app) {
         
         SDL_SetRenderDrawColor(app->renderer, 100, 0, 100, 0);
         SDL_RenderFillRect(app->renderer, &app->chats.items[i].rect);
-        SDL_RenderFillRect(app->renderer, &app->input_rect);
 
         int textW, textH;
         SDL_QueryTexture(app->chats.items[i].texture, NULL, NULL, &textW, &textH);
 
         SDL_Rect dstRect = center_text_rect(app->chats.items[i].rect, textW, textH);
-        printf("%s", app->userinput);        
+        
+        // system("clear");
+        // printf("%s", app->userinput);        
+        
         SDL_RenderCopy(app->renderer, app->chats.items[i].texture, NULL, &dstRect);
     }
 
@@ -220,5 +231,9 @@ void mouse_hover(struct GUIState* app){
         SDL_RenderCopy(app->renderer, app->chats.items[i].texture, NULL, &dstRect);
 
     }
+
+}
+
+void update_text_input(struct GUIState *app){
 
 }

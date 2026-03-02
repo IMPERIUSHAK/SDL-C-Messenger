@@ -1,4 +1,5 @@
 #include "client.h"
+
 void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunning){
     
     if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
@@ -39,10 +40,17 @@ void handle_mousewheel(struct GUIState *app, SDL_Event *event){
 
 }
 
+void handle_mousebutton(struct GUIState *app, SDL_Event *event){
+
+    if (event->button.button == SDL_BUTTON_LEFT){
+        printf("Left mouse button clicked");
+    }
+    
+}
 
 void client_events(struct GUIState *app, SDL_Event *event, bool *isRunning) {
     
-    SDL_StartTextInput();
+    //SDL_StartTextInput();
 
     while (SDL_PollEvent(event)) {
         switch (event->type)
@@ -58,7 +66,12 @@ void client_events(struct GUIState *app, SDL_Event *event, bool *isRunning) {
                 handle_mousewheel(app, event);
                 break;
             case SDL_TEXTINPUT:
-                strcat(app->userinput, event->text.text);
+                //strcat(app->userinput, event->text.text);
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                // if (event->button.button == SDL_BUTTON_LEFT)
+                //     printf("Mouse left clicked");
+                handle_mousebutton(app, event);
                 break;
             default:
                 break;
