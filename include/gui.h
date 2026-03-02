@@ -29,6 +29,7 @@ struct ChatList{
 };
 
 struct TextInputField{
+    bool isactive;
     SDL_Rect rect;
     SDL_Texture *texture;
     char userinput[2048];
@@ -76,8 +77,11 @@ struct GUIState{
 
 bool initialize_gui(struct GUIState* app);
 bool update_gui(struct GUIState* app);
+bool isInputActive(struct GUIState* app);
+bool update_text_input(struct GUIState *app);
 
 void render_chats(struct GUIState* app);
+void render_text_input(struct GUIState *app);
 void gui_cleanup(struct GUIState* app, int exit_status);
 void mouse_hover(struct GUIState* app);
 

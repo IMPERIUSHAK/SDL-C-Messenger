@@ -39,7 +39,6 @@ bool initialize_gui(struct GUIState* app){
         fprintf(stderr, "Error with initialization fon:%s ",TTF_GetError());
         return true;
     }
-
     // app->input_rect = (SDL_Rect){
     //     .x = 0,
     //     .y = SCREEN_HEIGHT - 70,
@@ -67,7 +66,7 @@ void gui_cleanup(struct GUIState* app, int exit_status){
         SDL_DestroyTexture(app->chats.items[i].texture);
     }
     free(app->chats.items); 
-    
+    SDL_DestroyTexture(app->userinput.texture);
     SDL_DestroyRenderer(app->renderer);
     SDL_DestroyWindow(app->window);
 
@@ -232,8 +231,59 @@ void mouse_hover(struct GUIState* app){
 
     }
 
+
 }
 
-void update_text_input(struct GUIState *app){
+bool update_text_input(struct GUIState *app){
 
+    char *txt = app->userinput.userinput;
+    SDL_Color color = BASE_COLOR;
+
+    SDL_Surface *textSurface = TTF_RenderText_Blended(app->text_font, txt, color);
+    if(!textSurface){
+        return true;
+    }
+
+    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(app->renderer, textSurface);
+    SDL_FreeSurface(textSurface);
+    if(!textTexture){
+        return true;
+    }
+
+    app->userinput.texture = textTexture;
+
+    app->userinput.rect = (SDL_Rect){
+        .x = 0,
+        .y = SCREEN_HEIGHT - 70,
+        .w = SCREEN_WIDTH,
+        .h = 70,
+    };
+
+    return false;
+}
+
+void render_text_input(struct GUIState *app){
+
+    SDL_RenderFillRect(app->renderer, &app->userinput.rect);
+
+    int textW, textH;
+    SDL_QueryTexture(app->userinput.texture, NULL, NULL, &textW, &textH);
+    SDL_Rect dstRect = center_text_rect(app->userinput.rect, textW, textH);
+
+    SDL_RenderCopy(app->renderer, app->userinput.texture, NULL, &dstRect);    
+
+}
+
+bool isInputActive(struct GUIState* app){
+
+    int x = 0, y = 0;
+
+    SDL_GetMouseState(&x, &y);
+
+    if (point_in_rect(x, y, &app->userinput.rect)){
+        app->userinput.isactive = true;
+        return true;
+    }
+
+    return false;
 }

@@ -1,3 +1,3 @@
-meesage->messageList--------------------->guistate
+client->meesage->messageList--------------------->guistate-->render->client--->server
         \             \                /
          \-->ChatItem--\-->ChatList-->/

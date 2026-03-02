@@ -43,9 +43,22 @@ void handle_mousewheel(struct GUIState *app, SDL_Event *event){
 void handle_mousebutton(struct GUIState *app, SDL_Event *event){
 
     if (event->button.button == SDL_BUTTON_LEFT){
-        printf("Left mouse button clicked");
+        if (isInputActive(app)){
+            printf("Left mouse button clicked\n");
+            SDL_StartTextInput();
+        }else{
+            SDL_StopTextInput();
+        }
     }
+   
+}
+
+void handle_text_input(struct GUIState *app, SDL_Event *event){
     
+    if(!app->userinput.isactive) return;
+    strcat(app->userinput.userinput, event->text.text);
+    update_text_input(app);
+
 }
 
 void client_events(struct GUIState *app, SDL_Event *event, bool *isRunning) {
@@ -66,10 +79,12 @@ void client_events(struct GUIState *app, SDL_Event *event, bool *isRunning) {
                 handle_mousewheel(app, event);
                 break;
             case SDL_TEXTINPUT:
-                //strcat(app->userinput, event->text.text);
+                //strcat(app->userinput.userinput, event->text.text);
+                //update_text_input(app);
+                handle_text_input(app, event);
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                // if (event->button.button == SDL_BUTTON_LEFT)
+                // if (event->button.button == SDL_BUTTO)N_LEFT)
                 //     printf("Mouse left clicked");
                 handle_mousebutton(app, event);
                 break;
@@ -86,7 +101,7 @@ void run_client(struct GUIState *app) {
 
     if (update_gui(app)){
         gui_cleanup(app, EXIT_FAILURE);
-        fprintf(stderr, "Error initalizeing `update_gui`");
+        fprintf(stderr, "Error initalizeing `update_gui`\n");
         return;
     }
 
@@ -98,8 +113,10 @@ void run_client(struct GUIState *app) {
         SDL_RenderClear(app->renderer);
         
         render_chats(app);
+
         mouse_hover(app);
         
+        render_text_input(app);
         SDL_RenderPresent(app->renderer);
 
     }
