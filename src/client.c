@@ -57,7 +57,10 @@ void handle_text_input(struct GUIState *app, SDL_Event *event){
     
     if(!app->userinput.isactive) return;
     strcat(app->userinput.userinput, event->text.text);
-    update_text_input(app);
+    
+    if (update_text_input(app)){
+        gui_cleanup(app, EXIT_FAILURE);
+    }
 
 }
 

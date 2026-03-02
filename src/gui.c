@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-//function for first initialization to check everything  before start-up  
+//function for first initialization to check and set everything  before start-up  
 bool initialize_gui(struct GUIState* app){
 
     if(SDL_Init(SDL_INIT_EVERYTHING)) {
@@ -207,8 +207,7 @@ bool point_in_rect(int x, int y, SDL_Rect *r) {
             y <= r->y + r->h);
 }
 
-
-
+// this function will change a color of message rectangle if mouse cover it
 void mouse_hover(struct GUIState* app){
 
     int n = app->chats.count;
@@ -233,7 +232,7 @@ void mouse_hover(struct GUIState* app){
 
 
 }
-
+//This method updates `userinput sctruct` if everytime our programm modifies it
 bool update_text_input(struct GUIState *app){
 
     char *txt = app->userinput.userinput;
@@ -262,6 +261,7 @@ bool update_text_input(struct GUIState *app){
     return false;
 }
 
+//As you can understand from name of this function, it will render text input for every frame
 void render_text_input(struct GUIState *app){
 
     SDL_RenderFillRect(app->renderer, &app->userinput.rect);
@@ -274,12 +274,14 @@ void render_text_input(struct GUIState *app){
 
 }
 
+
+//Checks if your in InputField(clicked with mouse)
 bool isInputActive(struct GUIState* app){
 
     int x = 0, y = 0;
 
     SDL_GetMouseState(&x, &y);
-
+    app->userinput.isactive = false;
     if (point_in_rect(x, y, &app->userinput.rect)){
         app->userinput.isactive = true;
         return true;
