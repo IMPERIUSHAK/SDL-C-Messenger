@@ -1,5 +1,6 @@
 #include "client.h"
 
+//checks for specific keys(esc, ctrl, shift), but for now it's just `esc`
 void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunning){
     
     if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
