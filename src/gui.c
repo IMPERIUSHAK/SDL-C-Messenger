@@ -289,3 +289,61 @@ bool isInputActive(struct GUIState* app){
 
     return false;
 }
+
+
+void send_message(struct GUIState *app){
+    
+    char* str = app->userinput.userinput;
+    int len = strlen(str);
+    
+    if (len == 0) return;
+ 
+    /*printf("%s\n", str);
+    
+    memset(app->userinput.userinput, 0, sizeof(app->userinput.userinput));
+    app->userinput.texture = NULL;
+    */
+
+    struct Message *msg = (struct Message*)malloc(sizeof(struct Message));
+    if (!msg){
+        fprintf(stderr, "Error to create struct for new  message\n");
+        return;
+    }
+
+    msg->text = (char *)malloc((len * sizeof(char))+1);
+    if (!msg->text){
+        fprintf(stderr, "Error to malloc message size");
+        free(msg);
+        return;
+    }
+
+    strcpy(msg->text, str);
+    msg->text[len] = '\0';
+    
+
+    msg->type = MESSAGE_OUTGOING;
+    if (!msg->type){
+        fprintf(stderr, "Error while creating timestamp for new `message`");
+        free(msg);
+        return;
+    }
+
+    msg->timestamp = time(NULL);
+    if (!msg->timestamp){
+        fprintf(stderr, "Error while adding `timestamp` to new `message`");
+        free(msg);
+    }
+    printf("%s\n", msg->text);
+
+    if (update_json(msg)){
+        fprintf(stderr, "Error with updating json");
+        free(msg);
+        return;
+    }
+
+    free(msg->text);
+    free(msg);
+    
+    memset(app->userinput.userinput, 0, sizeof(app->userinput.userinput));
+    app->userinput.texture = NULL;
+}

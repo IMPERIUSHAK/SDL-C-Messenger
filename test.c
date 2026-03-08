@@ -78,7 +78,7 @@ int main(){
 
     FILE *fp;
 
-    fp = fopen("msg.json", "w+");
+    fp = fopen("msg1.json", "w+");
     fprintf(fp, stri);
         
     return 0;

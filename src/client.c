@@ -3,12 +3,25 @@
 //checks for specific keys(esc, ctrl, shift), but for now it's just `esc`
 void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunning){
     
-    if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
-        *isRunning = false;
-        gui_cleanup(app, EXIT_SUCCESS);
+    switch (event->key.keysym.scancode){
+        case SDL_SCANCODE_ESCAPE:
+            *isRunning = false;
+            gui_cleanup(app, EXIT_SUCCESS);
+            break;
+
+        case SDL_SCANCODE_RETURN:
+            send_message(app);
+            init_messages(&app->messages);
+            update_gui(app);
+            printf("%ld\n", app->messages.count);
+            break;
+       
+        default:
+            break;
     }
 
 }
+
 
 void handle_wheele_up(struct GUIState* app){
 
@@ -65,6 +78,7 @@ void handle_text_input(struct GUIState *app, SDL_Event *event){
 
 }
 
+//Events
 void client_events(struct GUIState *app, SDL_Event *event, bool *isRunning) {
     
     //SDL_StartTextInput();
@@ -124,4 +138,5 @@ void run_client(struct GUIState *app) {
         SDL_RenderPresent(app->renderer);
 
     }
+    
 }

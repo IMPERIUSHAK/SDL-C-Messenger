@@ -15,7 +15,6 @@
 #define HOVER_COLOR {0, 125, 125, 124}
 
 
-
 struct ChatItem{
     struct Message* text;
     SDL_Texture *texture;
@@ -80,6 +79,8 @@ bool update_gui(struct GUIState* app);
 bool isInputActive(struct GUIState* app);
 bool update_text_input(struct GUIState *app);
 
+void send_message(struct GUIState *app);
+    
 void render_chats(struct GUIState* app);
 void render_text_input(struct GUIState *app);
 void gui_cleanup(struct GUIState* app, int exit_status);

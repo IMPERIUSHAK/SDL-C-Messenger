@@ -3,9 +3,13 @@
 #include <string.h>
 #include  <stdbool.h>
 
+
+#define MSGS "msg.json" 
+
+
 bool init_messages(struct MessageList* list){
 
-    char *json_str = read_file_to_string("msg.json");
+    char *json_str = read_file_to_string(MSGS);
     if(!json_str){
         return true;
     }
@@ -117,8 +121,92 @@ char *read_file_to_string(const char *filename) {
     return buffer;
 }
 
+int update_id(cJSON *str){
+    int len = cJSON_GetArraySize(str);
+    if (len == 0) return 1;
+    
+    cJSON *last_item = cJSON_GetArrayItem(str, len - 1);
+    cJSON *last_id = cJSON_GetObjectItemCaseSensitive(last_item, "id");
+    
+    if (!cJSON_IsNumber(last_id)) {
+        printf("Error: 'id' is not a number\n");
+        return 1;
+    }
+    
+    return (last_id->valueint) + 1;
+}
 
 
+
+bool update_json(struct Message *obj){
+    char *str = read_file_to_string(MSGS);
+    cJSON *parse_json = cJSON_Parse(str);
+
+    cJSON *msgArr = cJSON_GetObjectItemCaseSensitive(parse_json, "messages");
+    int id = update_id(msgArr);
+
+
+    if (!cJSON_IsArray(msgArr)) {
+        fprintf(stderr, "Error: 'messages' is not an array\n");
+        return true;
+    }
+
+    cJSON *newObj = cJSON_CreateObject();
+    if (!newObj){
+        fprintf(stderr, "error with new json obj\n");
+    }
+
+    cJSON_AddNumberToObject(newObj, "id", id);
+    cJSON_AddStringToObject(newObj, "text", obj->text);
+    cJSON_AddNumberToObject(newObj, "timestamp", obj->timestamp);
+    
+    switch (obj->type)
+    {
+    case MESSAGE_INCOMING:
+        cJSON_AddStringToObject(newObj, "type", "MESSAGE_INCOMING");
+        break;
+    case MESSAGE_OUTGOING:
+        cJSON_AddStringToObject(newObj, "type", "MESSAGE_OUTGOING");
+    
+    default:
+        break;
+    }
+    
+
+    cJSON_AddItemToArray(msgArr, newObj);
+    
+
+    cJSON *count = cJSON_GetObjectItemCaseSensitive(parse_json, "count");
+    if (!cJSON_IsNumber(count)) {
+        fprintf(stderr, "Error with json input variable\n");
+        return true;
+    }
+    
+    cJSON_SetNumberValue(count, count->valueint + 1);
+    
+    cJSON *capacity = cJSON_GetObjectItemCaseSensitive(parse_json, "capacity");
+    if (!cJSON_IsNumber(capacity)) {
+        fprintf(stderr, "Error with updating json variable\n");
+    }
+
+    int new_cap = cJSON_GetArraySize(msgArr);
+    cJSON_SetNumberValue(capacity, new_cap);
+
+    char *new_json = cJSON_Print(parse_json);
+    FILE *fp = fopen(MSGS, "w");
+    if (fp == NULL){
+        fprintf(stderr, "Error: Could not open file for writing\n");
+        return true;
+    }
+    fprintf(fp, "%s", new_json);
+    
+    
+    fclose(fp);
+    free(new_json);
+    cJSON_Delete(parse_json);
+    
+    return false;
+}
 
 //!!! Test case below |
 //                    |  

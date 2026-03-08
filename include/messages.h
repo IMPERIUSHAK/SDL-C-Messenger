@@ -26,5 +26,7 @@ bool init_messages(struct MessageList* list);
 
 bool message_from_json(cJSON *json, struct Message* msg);
 bool messages_from_json(const char *json_str, struct MessageList* list);
+bool update_json(struct Message *obj);
+
 void messages_free(struct MessageList* list);
 char* read_file_to_string(const char *filename);
