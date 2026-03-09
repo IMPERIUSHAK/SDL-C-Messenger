@@ -333,13 +333,8 @@ void send_message(struct GUIState *app){
         fprintf(stderr, "Error while adding `timestamp` to new `message`");
         free(msg);
     }
-    printf("%s\n", msg->text);
 
-    if (update_json(msg)){
-        fprintf(stderr, "Error with updating json");
-        free(msg);
-        return;
-    }
+    queue_push(&app->json_queue, msg);
 
     free(msg->text);
     free(msg);

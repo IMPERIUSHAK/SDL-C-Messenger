@@ -40,6 +40,7 @@ struct GUIState{
     struct ChatList chats;
     struct MessageList messages;
     struct TextInputField userinput;
+    struct JsonQueue json_queue;
     SDL_Color *color_state;
     TTF_Font *text_font;
 };

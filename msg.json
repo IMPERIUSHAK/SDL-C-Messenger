@@ -11,30 +11,20 @@
 			"type":	"MESSAGE_OUTGOING"
 		}, {
 			"id":	3,
-			"text":	"how are you?",
-			"timestamp":	983772,
+			"text":	"njknjnkn",
+			"timestamp":	1772971276,
 			"type":	"MESSAGE_OUTGOING"
 		}, {
 			"id":	4,
-			"text":	"klmdlfds",
-			"timestamp":	1772969745,
+			"text":	"asdsd",
+			"timestamp":	1773046568,
 			"type":	"MESSAGE_OUTGOING"
 		}, {
 			"id":	5,
-			"text":	"dsfd",
-			"timestamp":	1772970806,
-			"type":	"MESSAGE_OUTGOING"
-		}, {
-			"id":	6,
-			"text":	"dsfdlfmdf",
-			"timestamp":	1772970808,
-			"type":	"MESSAGE_OUTGOING"
-		}, {
-			"id":	7,
-			"text":	"xclkvmcvkmx",
-			"timestamp":	1772970810,
+			"text":	"sdasdsd,lsd",
+			"timestamp":	1773046578,
 			"type":	"MESSAGE_OUTGOING"
 		}],
-	"count":	22,
-	"capacity":	7
+	"count":	9,
+	"capacity":	9
 }

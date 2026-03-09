@@ -1,5 +1,5 @@
 #include "client.h"
-
+#include <pthread.h>
 //checks for specific keys(esc, ctrl, shift), but for now it's just `esc`
 void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunning){
     
@@ -13,9 +13,7 @@ void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunnin
             send_message(app);
             init_messages(&app->messages);
             update_gui(app);
-            printf("%ld\n", app->messages.count);
-            break;
-       
+            break; 
         default:
             break;
     }
@@ -123,7 +121,10 @@ void run_client(struct GUIState *app) {
         return;
     }
 
-
+    pthread_t thread1;
+    
+    pthread_create(&thread1, NULL, json_worker, &app->json_queue);
+    
     while (isRunning) { 
 
         client_events(app, &event, &isRunning);

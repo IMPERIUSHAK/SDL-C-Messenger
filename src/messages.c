@@ -167,7 +167,7 @@ bool update_json(struct Message *obj){
         break;
     case MESSAGE_OUTGOING:
         cJSON_AddStringToObject(newObj, "type", "MESSAGE_OUTGOING");
-    
+        break;
     default:
         break;
     }
@@ -208,12 +208,63 @@ bool update_json(struct Message *obj){
     return false;
 }
 
-//!!! Test case below |
-//                    |  
+
+void queue_push(struct JsonQueue *q, struct Message *msg)
+{
+    pthread_mutex_lock(&q->mutex);
+
+    struct Message *dst = &q->msgs[q->count];
+
+    dst->id = msg->id;
+    dst->timestamp = msg->timestamp;
+    dst->type = msg->type;
+
+    dst->text = strdup(msg->text);
+
+    q->count++;
+
+    pthread_mutex_unlock(&q->mutex);
+}
+
+void *json_worker(void *arg)
+{
+    struct JsonQueue *q = arg;
+
+    while (1) {
+
+        pthread_mutex_lock(&q->mutex);
+
+        if (q->count > 0) {
+
+            struct Message msg = q->msgs[0];
+
+            for (int i = 1; i < q->count; i++)
+                q->msgs[i-1] = q->msgs[i];
+
+            q->count--;
+
+            pthread_mutex_unlock(&q->mutex);
+
+            update_json(&msg);
+            free(msg.text);
+        }
+        else {
+            pthread_mutex_unlock(&q->mutex);
+        }
+
+        usleep(3000);
+    }
+
+    return NULL;
+}
+//     |    !!!Test case    |
+//     |                    |  
 /*
+
+
 int main(void) {
-#include <stdbool.h>
-p
+
+
     struct MessageList msgs = {0};
 
     char *json_str = read_file_to_string("msg.json");
