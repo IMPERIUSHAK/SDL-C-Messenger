@@ -11,20 +11,10 @@
 			"type":	"MESSAGE_OUTGOING"
 		}, {
 			"id":	3,
-			"text":	"njknjnkn",
-			"timestamp":	1772971276,
-			"type":	"MESSAGE_OUTGOING"
-		}, {
-			"id":	4,
-			"text":	"asdsd",
-			"timestamp":	1773046568,
-			"type":	"MESSAGE_OUTGOING"
-		}, {
-			"id":	5,
-			"text":	"sdasdsd,lsd",
-			"timestamp":	1773046578,
+			"text":	"hola",
+			"timestamp":	1773938939,
 			"type":	"MESSAGE_OUTGOING"
 		}],
-	"count":	9,
-	"capacity":	9
+	"count":	45,
+	"capacity":	7
 }

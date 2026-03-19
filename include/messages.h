@@ -30,6 +30,7 @@ struct JsonQueue {
     int count;
 
     pthread_mutex_t mutex;
+    pthread_cond_t cond;
 };
 
 bool init_messages(struct MessageList* list);

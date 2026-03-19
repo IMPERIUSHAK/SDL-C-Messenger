@@ -211,8 +211,7 @@ bool update_json(struct Message *obj){
 
 void queue_push(struct JsonQueue *q, struct Message *msg)
 {
-    pthread_mutex_lock(&q->mutex);
-
+    
     struct Message *dst = &q->msgs[q->count];
 
     dst->id = msg->id;
@@ -223,7 +222,6 @@ void queue_push(struct JsonQueue *q, struct Message *msg)
 
     q->count++;
 
-    pthread_mutex_unlock(&q->mutex);
 }
 
 void *json_worker(void *arg)
@@ -246,13 +244,12 @@ void *json_worker(void *arg)
             pthread_mutex_unlock(&q->mutex);
 
             update_json(&msg);
+            pthread_cond_signal(&q->cond);
             free(msg.text);
         }
         else {
             pthread_mutex_unlock(&q->mutex);
         }
-
-        usleep(3000);
     }
 
     return NULL;

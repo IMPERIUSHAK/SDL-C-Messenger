@@ -1,4 +1,5 @@
 #include "client.h"
+#include <SDL2/SDL_render.h>
 #include <pthread.h>
 //checks for specific keys(esc, ctrl, shift), but for now it's just `esc`
 void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunning){
@@ -11,14 +12,26 @@ void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunnin
 
         case SDL_SCANCODE_RETURN:
             send_message(app);
+            //init_messages(&app->messages);
+            
+            if (app->chats.items){
+                
+                for (int i = 0; i < app->chats.count; i++)
+                    SDL_DestroyTexture(app->chats.items[i].texture);
+                
+                free(app->chats.items);
+                app->chats.count = 0;
+                app->chats.items = NULL;
+            }
             init_messages(&app->messages);
             update_gui(app);
+            
             break; 
         default:
             break;
     }
-
 }
+
 
 
 void handle_wheele_up(struct GUIState* app){

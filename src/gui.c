@@ -1,9 +1,11 @@
 #include "gui.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
 #include <stdio.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 //function for first initialization to check and set everything  before start-up  
 bool initialize_gui(struct GUIState* app){
@@ -76,41 +78,42 @@ void gui_cleanup(struct GUIState* app, int exit_status){
 
 
 //define sender
-void who_sent(enum MessageType bywho, char* str) {
+char* who_sent(enum MessageType bywho, char* str) {
     char *prefix;
-    size_t prefix_len;
+
     
     if (bywho == MESSAGE_INCOMING) {
         prefix = "Me: ";
-        prefix_len = 4;
+
     } else if (bywho == MESSAGE_OUTGOING) {
         prefix = "Friend: ";
-        prefix_len = 8;
-    } else {
-        return;
-    }
-    
-    char *new_text = malloc(prefix_len + strlen(str) + 1);
-    
-    if (new_text != NULL) {
-        
-        strcpy(new_text, prefix);
-        strcat(new_text, str);
-        strcpy(str, new_text);
 
-        free(new_text);
+    } else {
+        return strdup(str);
     }
+    
+    char *new_text = malloc(strlen(prefix) + strlen(str) + 1);
+    
+    if (!new_text) return NULL;
+   
+    strcpy(new_text, prefix);
+    strcat(new_text, str);
+
+    return new_text;
 }
 
 //update all
 bool update_gui(struct GUIState* app){
-    
+   
     int num = app->messages.count;
 
     if (app->chats.items){
-        free(app->chats.items);
+       for (int i = 0; i < app->messages.count; i++){
+            SDL_DestroyTexture(app->chats.items[i].texture);
+       }
+       free(app->chats.items);
+       app->chats.items = NULL;
     }
-
     app->chats.items = malloc(num * sizeof(*app->chats.items));
     if(!app->chats.items){
         fprintf(stderr, "Error with Items init");
@@ -131,11 +134,14 @@ bool update_gui(struct GUIState* app){
         
         char *name = app->messages.items[i].text;
         enum MessageType bywho = app->messages.items[i].type;
+
+        //who_sent(bywho, name);
         
-        who_sent(bywho, name);
+        char* nm = who_sent(bywho, name);
 
         //Font Init
-        SDL_Surface *textSurface = TTF_RenderText_Blended(app->text_font, name, color);
+        SDL_Surface *textSurface = TTF_RenderText_Blended(app->text_font, nm, color);
+        free(nm);
         if (!textSurface){
             return true;
         }
@@ -334,7 +340,10 @@ void send_message(struct GUIState *app){
         free(msg);
     }
 
+    pthread_mutex_lock(&app->json_queue.mutex);
     queue_push(&app->json_queue, msg);
+    pthread_cond_wait(&app->json_queue.cond, &app->json_queue.mutex);
+    pthread_mutex_unlock(&app->json_queue.mutex);
 
     free(msg->text);
     free(msg);

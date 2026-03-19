@@ -1,0 +1,70 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-g",
+      "-Iinclude",
+      "-I/usr/include/SDL2",
+      "-D_REENTRANT",
+      "-o",
+      "src/main.o",
+      "src/main.c"
+    ],
+    "directory": "/home/netwalker/Projects/C/messenger",
+    "file": "/home/netwalker/Projects/C/messenger/src/main.c",
+    "output": "/home/netwalker/Projects/C/messenger/src/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-g",
+      "-Iinclude",
+      "-I/usr/include/SDL2",
+      "-D_REENTRANT",
+      "-o",
+      "src/client.o",
+      "src/client.c"
+    ],
+    "directory": "/home/netwalker/Projects/C/messenger",
+    "file": "/home/netwalker/Projects/C/messenger/src/client.c",
+    "output": "/home/netwalker/Projects/C/messenger/src/client.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-g",
+      "-Iinclude",
+      "-I/usr/include/SDL2",
+      "-D_REENTRANT",
+      "-o",
+      "src/gui.o",
+      "src/gui.c"
+    ],
+    "directory": "/home/netwalker/Projects/C/messenger",
+    "file": "/home/netwalker/Projects/C/messenger/src/gui.c",
+    "output": "/home/netwalker/Projects/C/messenger/src/gui.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-g",
+      "-Iinclude",
+      "-I/usr/include/SDL2",
+      "-D_REENTRANT",
+      "-o",
+      "src/messages.o",
+      "src/messages.c"
+    ],
+    "directory": "/home/netwalker/Projects/C/messenger",
+    "file": "/home/netwalker/Projects/C/messenger/src/messages.c",
+    "output": "/home/netwalker/Projects/C/messenger/src/messages.o"
+  }
+]
