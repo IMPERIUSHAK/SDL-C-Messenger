@@ -1,7 +1,11 @@
 #include "client.h"
 #include <SDL2/SDL_render.h>
 #include <pthread.h>
-//checks for specific keys(esc, ctrl, shift), but for now it's just `esc`
+
+// button handlers such as(esc, return, backspace .etc)
+
+bool handle_backspace_input(struct GUIState *app);
+
 void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunning){
     
     switch (event->key.keysym.scancode){
@@ -27,13 +31,33 @@ void handle_keydown(struct GUIState *app, const SDL_Event *event, bool *isRunnin
             update_gui(app);
             
             break; 
+        case SDL_SCANCODE_BACKSPACE:
+
+            if (!app->userinput.isactive || handle_backspace_input(app)) break;
+            update_text_input(app);
+            break;
         default:
             break;
     }
 }
 
+bool handle_backspace_input(struct GUIState *app){
 
+    char* str = app->userinput.userinput;
 
+    int len = strlen(str);
+    
+    if (len == 1){
+        SDL_DestroyTexture(app->userinput.texture);
+        app->userinput.texture = NULL;
+        str[0] = '\0';
+        return true;
+    }
+
+    str[len - 1] = '\0';
+
+    return false;
+}
 void handle_wheele_up(struct GUIState* app){
 
     int key = app->chats.scroll_offset;

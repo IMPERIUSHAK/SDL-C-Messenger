@@ -1,3 +1,6 @@
+//So in this test case, i was trying to figure how creating json works in C
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <cjson/cJSON.h>

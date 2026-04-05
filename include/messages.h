@@ -1,3 +1,6 @@
+#ifndef MESSAGE_H
+#define MESSAGE_H
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -43,3 +46,5 @@ void queue_push(struct JsonQueue *q, struct Message *msg);
 void* json_worker(void* arg);
 void messages_free(struct MessageList* list);
 char* read_file_to_string(const char *filename);
+
+#endif

@@ -83,10 +83,10 @@ char* who_sent(enum MessageType bywho, char* str) {
 
     
     if (bywho == MESSAGE_INCOMING) {
-        prefix = "Me: ";
+        prefix = "Friend: ";
 
     } else if (bywho == MESSAGE_OUTGOING) {
-        prefix = "Friend: ";
+        prefix = "Me: ";
 
     } else {
         return strdup(str);
@@ -113,7 +113,7 @@ bool update_gui(struct GUIState* app){
        }
        free(app->chats.items);
        app->chats.items = NULL;
-    }
+    }*
     app->chats.items = malloc(num * sizeof(*app->chats.items));
     if(!app->chats.items){
         fprintf(stderr, "Error with Items init");
@@ -130,7 +130,7 @@ bool update_gui(struct GUIState* app){
 
     
     //update chats
-    while(y < SCREEN_WIDTH && i < num){
+    *while(y < SCREEN_WIDTH && i < num){
         
         char *name = app->messages.items[i].text;
         enum MessageType bywho = app->messages.items[i].type;
@@ -153,8 +153,8 @@ bool update_gui(struct GUIState* app){
         if (!textTexture) return true;
         app->chats.items[i].texture = textTexture;
         
-        if(i % 2 !=0 ){ x+= (SCREEN_WIDTH - 300);}
-        else if(i != 0 && i % 2 == 0){ x-= (SCREEN_WIDTH - 300);}
+        if(bywho == MESSAGE_OUTGOING ){ x= (SCREEN_WIDTH - 300);}
+        else{ x= 0;}
         //setint rect to chats
         app->chats.items[i].rect = (SDL_Rect){
             .x = x,
@@ -295,7 +295,6 @@ bool isInputActive(struct GUIState* app){
 
     return false;
 }
-
 
 void send_message(struct GUIState *app){
     

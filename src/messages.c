@@ -211,7 +211,10 @@ bool update_json(struct Message *obj){
 
 void queue_push(struct JsonQueue *q, struct Message *msg)
 {
-    
+    if (q->count >= 64){
+        fprintf(stderr, "memory overflow while tring to add to 'json'\n");
+        return;
+    }
     struct Message *dst = &q->msgs[q->count];
 
     dst->id = msg->id;
@@ -254,6 +257,10 @@ void *json_worker(void *arg)
 
     return NULL;
 }
+
+
+//Test case for cjson (trying read from file)
+
 //     |    !!!Test case    |
 //     |                    |  
 /*

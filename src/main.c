@@ -1,14 +1,12 @@
 #include <SDL2/SDL.h>
 #include "client.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
 
 int main(void)
 {
     struct GUIState app = {0};
     pthread_cond_init(&app.json_queue.cond, NULL);
-    
+
     if (init_messages(&app.messages)){
         gui_cleanup(&app, EXIT_FAILURE);
         messages_free(&app.messages);

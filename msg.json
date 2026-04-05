@@ -13,8 +13,23 @@
 			"id":	3,
 			"text":	"hola",
 			"timestamp":	1773938939,
+			"type":	"MESSAGE_INCOMING"
+		}, {
+			"id":	4,
+			"text":	"fee",
+			"timestamp":	1773975028,
+			"type":	"MESSAGE_OUTGOING"
+		}, {
+			"id":	5,
+			"text":	"efefef",
+			"timestamp":	1773975603,
+			"type":	"MESSAGE_INCOMING"
+		}, {
+			"id":	6,
+			"text":	"sdsd",
+			"timestamp":	1773994105,
 			"type":	"MESSAGE_OUTGOING"
 		}],
-	"count":	45,
-	"capacity":	7
+	"count":	1,
+	"capacity":	6
 }
